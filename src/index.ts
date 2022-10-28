@@ -10,16 +10,27 @@ interface DoubleBracketLinkOptions {
    * After removing the provided prefix, param `addPrefix` will be added to the front of url
    */
   addPrefix?: string
+
+  /**
+   * add suffix to uri
+   */
+  uriSuffix?: string
+
+  /**
+   * parse link with attribute target="_blank"
+   * @default false
+   */
+  blank?: boolean
 }
 
-const processLink = (link: string): string => {
-  const splits = link.split('#')
+const processLink = (link: string, uriSuffix?: string): string => {
+  let [path, title] = link.split('#')
 
-  const path = splits[0]
-  let title = splits[1]
+  if (uriSuffix && path)
+    path = path + uriSuffix
 
   if (!title)
-    return `/${path}`.toLocaleLowerCase()
+    return `/${path}`
 
   if (title[0] === '^')
     title = title.slice(1)
@@ -30,9 +41,9 @@ const processLink = (link: string): string => {
   title = title.replace(/ /g, '-')
 
   if (!path)
-    return `#${title}`.toLocaleLowerCase()
+    return `#${title}`
 
-  return `/${path}#${title}`.toLocaleLowerCase()
+  return `/${path}#${title}`
 }
 
 const DoubleBracketLink: MarkdownIt.PluginWithOptions<DoubleBracketLinkOptions> = (md: markdownit, options = {}) => {
@@ -108,7 +119,7 @@ const DoubleBracketLink: MarkdownIt.PluginWithOptions<DoubleBracketLinkOptions> 
 
       const [url, text] = content.split('|')
 
-      const link = processLink(url)
+      const link = processLink(url, options.uriSuffix)
 
       // 设置链接的参数
       const bIndex = token.attrIndex('href')
@@ -119,6 +130,9 @@ const DoubleBracketLink: MarkdownIt.PluginWithOptions<DoubleBracketLinkOptions> 
         if (token.attrs)
           token.attrs[bIndex][1] = link
       }
+
+      if (options.blank)
+        token.attrPush(['target', '_blank'])
 
       // 文本节点
       token = state.push('text', '', 0)

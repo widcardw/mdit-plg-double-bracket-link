@@ -35,7 +35,12 @@ md.use(DoubleBracketLink, {
    * then it will parse ![[pages/path/to/file|target link]] into
    * <a href="/src/path/to/file">target link</a>
    */
-  addPrefix: ''
+  addPrefix: '',
+
+  /**
+   * (Optional) Add suffix to uri
+   */
+  uriSuffix: '.html'
 })
 ```
 
