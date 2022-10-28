@@ -25,6 +25,8 @@ md.use(DoubleBracketLink, {
    * (Optional) remove the prefix in the double brackets.
    * It will parse ![[pages/path/to/file|target link]] into
    * <a href="/path/to/file">target link</a>
+   *
+   * @default null
    */
   removePrefix: 'pages/',
   /**
@@ -34,13 +36,24 @@ md.use(DoubleBracketLink, {
    * For example, if the params are `{ removePrefix: 'pages/', addPrefix: 'src/' }`,
    * then it will parse ![[pages/path/to/file|target link]] into
    * <a href="/src/path/to/file">target link</a>
+   *
+   * @default null
    */
   addPrefix: '',
 
   /**
    * (Optional) Add suffix to uri
+   *
+   * @default null
    */
-  uriSuffix: '.html'
+  uriSuffix: '.html',
+
+  /**
+   * (Optional) Whether to add attribute `target="_blank"` to the hyperlinks
+   *
+   * @default false
+   */
+  blank: false
 })
 ```
 
